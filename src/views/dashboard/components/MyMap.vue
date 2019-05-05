@@ -6,9 +6,11 @@
         :lang="mapLang"   
         :events="events"
         :plugin="plugin"
+        :amap-manager="amapManager"
         class="amap-demo"
         >
       </el-amap>
+       <button @click="add()">add marker</button>
       <div id="lang">
         <div class="input-item"><input id="en" name="language" type="radio" checked="checked" @click="setLang('en')"><span class="input-text">英文底图</span></div>
         <div class="input-item"><input id="zh_en" name="language" type="radio" @click="setLang('zh_en')"><span class="input-text">中英文对照</span></div>
@@ -22,7 +24,7 @@
 import {Component, Vue} from 'vue-property-decorator';
 import { exists } from 'fs';
 // import {default as VueAMap} from 'vue-amap';
-// import { AMapManager } from 'vue-amap';
+import { AMapManager } from 'vue-amap';
 let _this:any = null;
 @Component
 export default class MyMap extends Vue {
@@ -36,6 +38,7 @@ export default class MyMap extends Vue {
     lat: null,
     loaded: false
   };
+  amapManager = new AMapManager();
   _this = this;
   events = {
     init: (o: any) => {
@@ -85,6 +88,13 @@ export default class MyMap extends Vue {
   };
   public refreshCurPos(lng:number, lat:number) {
     this.center = [lng, lat];
+  };
+  public add() {
+    let map = this.amapManager.getMap();
+    let marker = new AMap.Marker({
+      position: [121.59996, 31.177646]
+    });
+    marker.setMap(map);
   };
 };
 </script>
