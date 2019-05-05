@@ -19,6 +19,7 @@
     "path-to-regexp": "^3.0.0",
     "register-service-worker": "^1.6.2",
     "vue": "^2.6.10",
+    "vue-amap": "^0.5.9",
     "vue-class-component": "^7.0.1",
     "vue-property-decorator": "^8.1.0",
     "vue-router": "^3.0.2",

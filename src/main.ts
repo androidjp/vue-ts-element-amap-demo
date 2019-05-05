@@ -20,6 +20,7 @@ import App from '@/App.vue'
 import store from '@/store'
 import router from '@/router'
 import '@/registerServiceWorker'
+import VueAMap from 'vue-amap'
 
 Vue.use(ElementUI)
 Vue.use(SvgIcon, {
@@ -28,6 +29,27 @@ Vue.use(SvgIcon, {
   defaultHeight: '1em'
 })
 
+
+let clearAMapStorage = function () {
+  let i = 0;
+  while (i < 1000) {
+  let key = window.localStorage.key(i);
+  if (key === undefined || key === null) {
+  break;
+  } else if (/^_AMap/.test(key)) {
+    window.localStorage.removeItem(key);
+  }
+  i++;
+  }
+};
+
+Vue.use(VueAMap)
+clearAMapStorage();
+VueAMap.initAMapApiLoader({
+  key: '2f7cf73468883f720a37ef942e01bffe',
+  plugin: ['AMap.Geolocation','AMap.Autocomplete', 'AMap.PlaceSearch', 'AMap.Scale', 'AMap.OverView', 'AMap.ToolBar', 'AMap.MapType', 'AMap.PolyEditor', 'AMap.CircleEditor'],
+  v: '1.4.4'
+})
 Vue.config.productionTip = false
 
 new Vue({
@@ -35,3 +57,4 @@ new Vue({
   store,
   render: (h) => h(App)
 }).$mount('#app')
+

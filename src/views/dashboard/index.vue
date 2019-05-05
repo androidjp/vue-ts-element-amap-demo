@@ -9,14 +9,19 @@
         :key="role"
       >{{ role }}</span>
     </div>
+    <my-map></my-map>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import { UserModule } from '@/store/modules/user'
-
-@Component
+import {default as MyMap} from './components/MyMap.vue'
+@Component({
+  components: {
+    MyMap
+  }
+})
 export default class Dashboard extends Vue {
   get name() {
     return UserModule.name
