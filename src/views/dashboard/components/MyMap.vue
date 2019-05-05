@@ -30,7 +30,7 @@ export default class MyMap extends Vue {
   zoom =  12;
   mapLang = 'en';
   curPositionInfo = {
-    str:null,
+    str:'',
     address: null,
     lng: null,
     lat: null,
@@ -70,10 +70,8 @@ export default class MyMap extends Vue {
         init(o:any) {
           // o 是高德地图定位插件实例
           o.getCurrentPosition((status:any, result:any) => {
-            console.log('getCurrentPosition finished')
-            console.log(status)
-            console.log(result)
             if (result && result.position) {
+              alert(result.formattedAddress);
               _this.refreshCurPos(result.position.lng, result.position.lat);
             }
           });
