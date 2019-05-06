@@ -16,6 +16,27 @@
         <div class="input-item"><input id="zh_en" name="language" type="radio" @click="setLang('zh_en')"><span class="input-text">中英文对照</span></div>
         <div class="input-item"><input id="zh_cn" name="language" type="radio" @click="setLang('zh_cn')"><span class="input-text">中文底图</span></div>
       </div>
+      <div>
+        <el-row>
+          请输入经度:
+          <el-input
+            placeholder="请输入经度"
+            v-model="this.lng"
+            clearable
+            style= "width:160px"
+            >
+          </el-input>
+          请输入纬度:
+          <el-input
+            placeholder="请输入纬度"
+            v-model="this.lat"
+            clearable
+            style= "width:160px"
+            >
+          </el-input>
+          <el-button icon="el-icon-search" circle @click="searchLocation"></el-button>
+        </el-row>
+      </div>
     </div>
 </template>
 <script lang="ts">
@@ -25,17 +46,18 @@ import {Component, Vue} from 'vue-property-decorator';
 import { exists } from 'fs';
 // import {default as VueAMap} from 'vue-amap';
 import { AMapManager } from 'vue-amap';
+import axios from 'axios';
 let _this:any = null;
 @Component
 export default class MyMap extends Vue {
   center = [121.59996, 31.197646];
   zoom =  12;
   mapLang = 'en';
+  lng = '121.59996';
+  lat = '31.197646';
   curPositionInfo = {
     str:'',
     address: null,
-    lng: null,
-    lat: null,
     loaded: false
   };
   amapManager = new AMapManager();
@@ -96,12 +118,27 @@ export default class MyMap extends Vue {
     });
     marker.setMap(map);
   };
+  public searchLocation() {
+    // https://restapi.amap.com/v3/geocode/regeo?output=xml&location=116.310003,39.991957&key=<用户的key>&radius=1000&extensions=all
+    alert('lng:' + this.lng + ', lat:' + this.lat);
+    axios.get('https://restapi.amap.com/v3/geocode/regeo', {
+      params:{
+        output:'JSON',
+        location: this.lng + ',' + this.lat,
+        key:'8a3b36c2265a30f551355400f51d05e2',
+        radius:1000,
+        extensions:'all'
+      }
+    }).then(res => {
+      console.log(res);
+    })
+
+  }
 };
 </script>
 <style lang="scss" scoped>
 .amap-page-container {
   width: 800px;
-  height: 600px;
 }
 .amap-demo {
     height: 500px;
