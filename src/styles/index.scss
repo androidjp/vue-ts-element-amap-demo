@@ -7,6 +7,7 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 @import './mixin.scss';
 @import './transition.scss';
 @import './svgicon.scss';
+@import '~leaflet/dist/leaflet.css';
 
 body {
   -moz-osx-font-smoothing: grayscale;

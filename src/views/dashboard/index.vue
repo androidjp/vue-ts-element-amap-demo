@@ -1,34 +1,33 @@
 <template>
   <div class="dashboard-container">
+    <div class="dashboard-text">name:{{ name }}</div>
     <div class="dashboard-text">
-      name:{{ name }}
-    </div>
-    <div class="dashboard-text">
-      roles:<span
-        v-for="role in roles"
-        :key="role"
-      >{{ role }}</span>
+      roles:
+      <span v-for="role in roles" :key="role">{{ role }}</span>
     </div>
     <my-map></my-map>
+    <open-s-map></open-s-map>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
-import { UserModule } from '@/store/modules/user'
-import {default as MyMap} from './components/MyMap.vue'
+import { Component, Vue } from "vue-property-decorator";
+import { UserModule } from "@/store/modules/user";
+import { default as MyMap } from "./components/MyMap.vue";
+import { default as OpenSMap } from "./components/OpenSMap.vue";
 @Component({
   components: {
-    MyMap
+    MyMap,
+    OpenSMap
   }
 })
 export default class Dashboard extends Vue {
   get name() {
-    return UserModule.name
+    return UserModule.name;
   }
 
   get roles() {
-    return UserModule.roles
+    return UserModule.roles;
   }
 }
 </script>
