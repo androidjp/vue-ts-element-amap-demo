@@ -5,9 +5,9 @@
     @update:center = "centerUpdated">
 
     <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
-    <!-- <l-marker :lat-lng="marker">
+    <l-marker :lat-lng="marker">
       <l-popup :content="text"></l-popup>
-    </l-marker> -->
+    </l-marker>
     <div v-if="isShowTenLine">
       <l-polyline v-for="(item, index) in polylines" v-bind:key="index"
         :lat-lngs="item.latlngs"
@@ -16,9 +16,9 @@
     </div>
     
     <l-control position="bottomleft" >
-      <button @click="toggleTenLine">
+      <el-button @click="toggleTenLine">
         隐藏/显示十段线
-      </button>
+      </el-button>
     </l-control>
   </l-map>
 </template>
@@ -27,6 +27,7 @@
 import { Component, Vue } from "vue-property-decorator";
 import { LMap, LTileLayer, LMarker, LPopup, LPolyline, LControl} from "vue2-leaflet";
 import L from 'leaflet';
+import axios from 'axios'
 @Component({
   components: {
     LMap,
@@ -60,8 +61,22 @@ export default class OpenSMap extends Vue {
   ];
   centerUpdated (center: any) {
       this.marker = center;
+      axios.get('https://restapi.amap.com/v3/geocode/regeo', {
+        params:{
+          output:'JSON',
+          location: this.marker.lng + ',' + this.marker.lat,
+          key:'8a3b36c2265a30f551355400f51d05e2',
+          radius:1000,
+          extensions:'all'
+        }
+      }).then(res => {
+        if (res.data.regeocode) {
+          this.text = res.data.regeocode.formatted_address
+        }
+      }).catch(err => {
+        console.error(err);
+      })
   }
-
   toggleTenLine () {
     this.isShowTenLine = !this.isShowTenLine;
   }
