@@ -8,16 +8,24 @@
     <!-- <l-marker :lat-lng="marker">
       <l-popup :content="text"></l-popup>
     </l-marker> -->
-    <l-polyline v-for="item in polylines" v-bind:key="item"
-      :lat-lngs="item.latlngs"
-      :color="polylineColor">
+    <div v-if="isShowTenLine">
+      <l-polyline v-for="(item, index) in polylines" v-bind:key="index"
+        :lat-lngs="item.latlngs"
+        :color="polylineColor">
       </l-polyline>
+    </div>
+    
+    <l-control position="bottomleft" >
+      <button @click="toggleTenLine">
+        隐藏/显示十段线
+      </button>
+    </l-control>
   </l-map>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import { LMap, LTileLayer, LMarker, LPopup, LPolyline } from "vue2-leaflet";
+import { LMap, LTileLayer, LMarker, LPopup, LPolyline, LControl} from "vue2-leaflet";
 import L from 'leaflet';
 @Component({
   components: {
@@ -25,7 +33,8 @@ import L from 'leaflet';
     LTileLayer,
     LMarker,
     LPopup,
-    LPolyline
+    LPolyline,
+    LControl
   }
 })
 export default class OpenSMap extends Vue {
@@ -35,6 +44,7 @@ export default class OpenSMap extends Vue {
   attribution = '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors';
   marker = L.latLng(47.413220, -1.219482);
   text = 'this is a marker';
+  isShowTenLine = false;
   polylineColor = 'green';
   polylines = [
     {latlngs:[[24.57765785743432,122.79666413281248],[23.463809301225297,122.51101960156248]]},
@@ -50,6 +60,10 @@ export default class OpenSMap extends Vue {
   ];
   centerUpdated (center: any) {
       this.marker = center;
+  }
+
+  toggleTenLine () {
+    this.isShowTenLine = !this.isShowTenLine;
   }
 
 }
