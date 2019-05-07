@@ -10,7 +10,7 @@
         class="amap-demo"
         >
       </el-amap>
-       <button @click="add()">add marker</button>
+       <!-- <button @click="add()">add marker</button> -->
       <div id="lang">
         <div class="input-item"><input id="en" name="language" type="radio" checked="checked" @click="setLang('en')"><span class="input-text">英文底图</span></div>
         <div class="input-item"><input id="zh_en" name="language" type="radio" @click="setLang('zh_en')"><span class="input-text">中英文对照</span></div>
@@ -21,7 +21,7 @@
           请输入经度:
           <el-input
             placeholder="请输入经度"
-            v-model="this.lng"
+            v-model="lng"
             clearable
             style= "width:160px"
             >
@@ -29,12 +29,15 @@
           请输入纬度:
           <el-input
             placeholder="请输入纬度"
-            v-model="this.lat"
+            v-model="lat"
             clearable
             style= "width:160px"
             >
           </el-input>
           <el-button icon="el-icon-search" circle @click="searchLocation"></el-button>
+        </el-row>
+        <el-row>
+          <p>{{searchAddress}}</p>
         </el-row>
       </div>
     </div>
@@ -53,8 +56,9 @@ export default class MyMap extends Vue {
   center = [121.59996, 31.197646];
   zoom =  12;
   mapLang = 'en';
-  lng = '121.59996';
-  lat = '31.197646';
+  lng = '113.575185';
+  lat = '22.373566';
+  searchAddress = '';
   curPositionInfo = {
     str:'',
     address: null,
@@ -120,7 +124,6 @@ export default class MyMap extends Vue {
   };
   public searchLocation() {
     // https://restapi.amap.com/v3/geocode/regeo?output=xml&location=116.310003,39.991957&key=<用户的key>&radius=1000&extensions=all
-    alert('lng:' + this.lng + ', lat:' + this.lat);
     axios.get('https://restapi.amap.com/v3/geocode/regeo', {
       params:{
         output:'JSON',
@@ -131,6 +134,12 @@ export default class MyMap extends Vue {
       }
     }).then(res => {
       console.log(res);
+      if (res.data.regeocode) {
+        this.searchAddress = res.data.regeocode.formatted_address
+        this.refreshCurPos(parseFloat(this.lng), parseFloat(this.lat));
+      }
+    }).catch(err => {
+      console.error(err);
     })
 
   }
